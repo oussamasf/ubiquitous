@@ -5,7 +5,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 export class EcoListener {
   @OnEvent('eco.created')
   handleOrderCreatedEvent(event) {
-    // handle and process "OrderCreatedEvent" event
+    // decouple the app using event emitter
     console.log(event);
   }
 }
