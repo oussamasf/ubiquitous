@@ -1,73 +1,46 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Nest.js App with Event Emitter for Decoupling
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Introduction
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This Readme provides an overview of a Nest.js application that utilizes an Event Emitter for decoupling components within the app. The purpose of this design pattern is to enhance the maintainability, scalability, and flexibility of the application by reducing tight coupling between different modules.
 
-## Description
+## Decoupling with Event Emitter
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Decoupling is a design principle that aims to reduce the interdependence of different components or modules within an application. Tight coupling can lead to code that is difficult to maintain, modify, and test. To overcome these challenges, developers use various patterns and techniques to achieve loose coupling.
 
-## Installation
+One such technique is using an Event Emitter. In the context of Node.js and Nest.js, an Event Emitter allows different parts of the application to communicate with each other without knowing the exact details of the communication channels or the implementation of the receiving components.
 
-```bash
-$ npm install
+## How to "Event Emitter"?
+
+### Step 1: Create the Event Emitter
+
+```
+import { EventEmitter2 } from '@nestjs/event-emitter';
+
+@Injectable()
+export class EcotrackerService {
+  constructor(private eventEmitter: EventEmitter2) {}
+  ....
 ```
 
-## Running the app
+### Step 2: Emit the event within a channel
 
-```bash
-# development
-$ npm run start
+`this.eventEmitter.emit('eco.created', { ecoEvent: 'hello glob' });`
 
-# watch mode
-$ npm run start:dev
+### Step 3: Listen to Events
 
-# production mode
-$ npm run start:prod
+```
+  @OnEvent('eco.created')
+  handleOrderCreatedEvent(event) {
+    // decouple the app using event emitter
+    console.log(event);
+  }
 ```
 
-## Test
+### Step 4: Inject Services
 
-```bash
-# unit tests
-$ npm run test
+Finally, make sure to inject the Listener to targeted module
 
-# e2e tests
-$ npm run test:e2e
+## Conclusion
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+you can create a Nest.js application that effectively utilizes an Event Emitter to decouple different modules within the app. This approach enhances maintainability, scalability, and flexibility, making your codebase more robust and easier to manage in the long run.
